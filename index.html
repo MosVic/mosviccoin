@@ -22,6 +22,10 @@
             -ms-user-select: none; /* для Internet Explorer */
             position: relative; /* для размещения анимации внутри body */
         }
+        .user-name {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
         .score {
             font-size: 3em; /* увеличиваем размер текста */
             margin-bottom: 40px; /* увеличиваем отступ */
@@ -79,8 +83,10 @@
             }
         }
     </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+    <div class="user-name" id="user-name">Welcome!</div>
     <div class="score" id="score">0</div>
     <button class="button" id="button" onclick="handleClick(event)" ontouchstart="multiTouchStart(event)"></button>
     <div class="bottom-container">
@@ -179,6 +185,13 @@
 
         setInterval(recoverClicks, 1000);
         checkReset();
+
+        // Telegram Web App integration
+        Telegram.WebApp.ready();
+        const user = Telegram.WebApp.initDataUnsafe?.user;
+        if (user) {
+            document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
+        }
     </script>
 </body>
 </html>
