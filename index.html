@@ -16,34 +16,87 @@
             flex-direction: column;
             font-family: Arial, sans-serif;
             color: white;
+            user-select: none; /* убираем возможность выделения текста и объектов */
         }
         .score {
             font-size: 2em;
             margin-bottom: 20px;
         }
         .button {
-            width: 100px;
-            height: 100px;
+            width: 300px; /* увеличиваем размер кнопки в 3 раза */
+            height: 300px; /* увеличиваем размер кнопки в 3 раза */
             background-color: white;
             border: none;
             border-radius: 50%;
             cursor: pointer;
+            font-size: 1em;
+        }
+        .progress-container {
+            width: 80%;
+            background-color: #ddd;
+            border-radius: 25px;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background-color: green;
+            border-radius: 25px;
+            text-align: center;
+            color: white;
         }
     </style>
 </head>
 <body>
-    <div class="score" id="score">Очки: 0</div>
-    <button class="button" onclick="incrementScore()"></button>
+    <div class="score" id="score">0</div>
+    <button class="button" id="button" onclick="incrementScore()"></button>
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar">5000</div>
+    </div>
 
     <script>
         let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-        document.getElementById('score').textContent = 'Очки: ' + score;
+        let clicks = localStorage.getItem('clicks') ? parseInt(localStorage.getItem('clicks')) : 5000;
+        let lastReset = localStorage.getItem('lastReset') ? parseInt(localStorage.getItem('lastReset')) : Date.now();
+
+        document.getElementById('score').textContent = score;
+        document.getElementById('progress-bar').textContent = clicks;
+        document.getElementById('progress-bar').style.width = (clicks / 5000 * 100) + '%';
+
+        function resetClicks() {
+            clicks = 5000;
+            lastReset = Date.now();
+            localStorage.setItem('clicks', clicks);
+            localStorage.setItem('lastReset', lastReset);
+            document.getElementById('progress-bar').textContent = clicks;
+            document.getElementById('progress-bar').style.width = (clicks / 5000 * 100) + '%';
+            document.getElementById('button').disabled = false;
+        }
+
+        function checkReset() {
+            let oneHour = 3600000;
+            if (Date.now() - lastReset > oneHour) {
+                resetClicks();
+            }
+        }
 
         function incrementScore() {
-            score++;
-            document.getElementById('score').textContent = 'Очки: ' + score;
-            localStorage.setItem('score', score);
+            checkReset();
+            if (clicks > 0) {
+                score++;
+                clicks--;
+                document.getElementById('score').textContent = score;
+                document.getElementById('progress-bar').textContent = clicks;
+                document.getElementById('progress-bar').style.width = (clicks / 5000 * 100) + '%';
+                localStorage.setItem('score', score);
+                localStorage.setItem('clicks', clicks);
+                if (clicks === 0) {
+                    document.getElementById('button').disabled = true;
+                }
+            }
         }
+
+        checkReset();
     </script>
 </body>
 </html>
