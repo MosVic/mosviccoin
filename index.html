@@ -147,6 +147,7 @@
                 if (clicks === 0) {
                     document.getElementById('button').disabled = true;
                 }
+                updateServerScore();
             }
         }
 
@@ -193,6 +194,16 @@
             }, 1000); // Удалить элемент через 1 секунду
         }
 
+        function updateServerScore() {
+            fetch('/api/updateScore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username: window.user.first_name, score }),
+            });
+        }
+
         setInterval(recoverClicks, 1000);
         checkReset();
 
@@ -201,9 +212,9 @@
         const user = Telegram.WebApp.initDataUnsafe?.user;
         if (user) {
             document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
+            window.user = user;
         }
 
-        // Open LeaderBoard
         function openLeaderboard() {
             window.location.href = 'leaderboard.html';
         }
