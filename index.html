@@ -6,7 +6,7 @@
     <title>Game</title>
     <style>
         body {
-            background-color: #8b1fff; /* указанный цвет фона */
+            background-color: #8b1fff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,34 +16,43 @@
             flex-direction: column;
             font-family: Arial, sans-serif;
             color: white;
-            user-select: none; /* убираем возможность выделения текста и объектов */
-            -webkit-user-select: none; /* для поддержки на мобильных устройствах */
-            -moz-user-select: none; /* для Firefox */
-            -ms-user-select: none; /* для Internet Explorer */
-            position: relative; /* для размещения анимации внутри body */
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            position: relative;
         }
         .user-name {
             font-size: 2em;
             margin-bottom: 10px;
         }
         .score {
-            font-size: 3em; /* увеличиваем размер текста */
-            margin-bottom: 40px; /* увеличиваем отступ */
+            font-size: 3em;
+            margin-bottom: 20px;
         }
         .button {
-            width: 200px; /* уменьшаем размер кнопки */
-            height: 200px; /* уменьшаем размер кнопки */
+            width: 200px;
+            height: 200px;
             background-color: white;
             border: none;
             border-radius: 50%;
             cursor: pointer;
             font-size: 1em;
-            background: url('9733008.png') no-repeat center center; /* устанавливаем изображение в качестве фона */
-            background-size: cover; /* изображение масштабируется */
+            background: url('9733008.png') no-repeat center center;
+            background-size: cover;
+        }
+        .leaderboard-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #fcf003;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
         }
         .bottom-container {
             width: 100%;
-            background-color: rgba(255, 255, 255, 0.5); /* полупрозрачный белый цвет */
+            background-color: rgba(255, 255, 255, 0.5);
             border-radius: 25px;
             padding: 20px;
             position: absolute;
@@ -59,11 +68,11 @@
         .progress-bar {
             width: 100%;
             height: 30px;
-            background-color: #fcf003; /* указанный цвет для доступных кликов */
+            background-color: #fcf003;
             border-radius: 25px;
             text-align: center;
             color: black;
-            line-height: 30px; /* для центрирования текста по вертикали */
+            line-height: 30px;
         }
         .floating-text {
             position: absolute;
@@ -89,6 +98,7 @@
     <div class="user-name" id="user-name">Welcome!</div>
     <div class="score" id="score">0</div>
     <button class="button" id="button" onclick="handleClick(event)" ontouchstart="multiTouchStart(event)"></button>
+    <button class="leaderboard-button" onclick="openLeaderboard()">LeaderBoard</button>
     <div class="bottom-container">
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar">5000</div>
@@ -191,6 +201,11 @@
         const user = Telegram.WebApp.initDataUnsafe?.user;
         if (user) {
             document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
+        }
+
+        // Open LeaderBoard
+        function openLeaderboard() {
+            window.location.href = 'leaderboard.html';
         }
     </script>
 </body>
