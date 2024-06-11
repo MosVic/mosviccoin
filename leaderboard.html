@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeaderBoard</title>
+    <style>
+        body {
+            background-color: #8b1fff;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid white;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #6b1cc4;
+        }
+        .back-button {
+            padding: 10px 20px;
+            background-color: #fcf003;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+    </style>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <h1>LeaderBoard</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboard">
+            <!-- Leaderboard data will be inserted here by JavaScript -->
+        </tbody>
+    </table>
+    <button class="back-button" onclick="goBack()">Back</button>
+
+    <script>
+        // Simulate leader board data
+        const leaderboardData = [
+            { name: "Player1", score: 5000 },
+            { name: "Player2", score: 4800 },
+            { name: "Player3", score: 4600 },
+            { name: "Player4", score: 4400 },
+            { name: "Player5", score: 4200 },
+            { name: "Player6", score: 4000 },
+            { name: "Player7", score: 3800 },
+            { name: "Player8", score: 3600 },
+            { name: "Player9", score: 3400 },
+            { name: "Player10", score: 3200 },
+        ];
+
+        function loadLeaderboard() {
+            const leaderboard = document.getElementById('leaderboard');
+            leaderboard.innerHTML = leaderboardData.map(player => `
+                <tr>
+                    <td>${player.name}</td>
+                    <td>${player.score}</td>
+                </tr>
+            `).join('');
+        }
+
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Load leaderboard on page load
+        loadLeaderboard();
+    </script>
+</body>
+</html>
