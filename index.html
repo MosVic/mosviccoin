@@ -36,13 +36,20 @@
             background: url('9733008.png') no-repeat center center; /* устанавливаем изображение в качестве фона */
             background-size: cover; /* изображение масштабируется */
         }
+        .bottom-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.5); /* полупрозрачный белый цвет */
+            border-radius: 25px;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+        }
         .progress-container {
             width: 80%;
             background-color: #ddd;
             border-radius: 25px;
-            margin-top: 20px;
-            position: absolute;
-            bottom: 20px;
         }
         .progress-bar {
             width: 100%;
@@ -58,8 +65,10 @@
 <body>
     <div class="score" id="score">0</div>
     <button class="button" id="button" onclick="incrementScore()" ontouchstart="multiTouchStart(event)"></button>
-    <div class="progress-container">
-        <div class="progress-bar" id="progress-bar">5000</div>
+    <div class="bottom-container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar">5000</div>
+        </div>
     </div>
 
     <script>
