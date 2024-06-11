@@ -17,14 +17,17 @@
             font-family: Arial, sans-serif;
             color: white;
             user-select: none; /* убираем возможность выделения текста и объектов */
+            -webkit-user-select: none; /* для поддержки на мобильных устройствах */
+            -moz-user-select: none; /* для Firefox */
+            -ms-user-select: none; /* для Internet Explorer */
         }
         .score {
-            font-size: 2em;
-            margin-bottom: 20px;
+            font-size: 3em; /* увеличиваем размер текста */
+            margin-bottom: 40px; /* увеличиваем отступ */
         }
         .button {
-            width: 300px; /* увеличиваем размер кнопки в 3 раза */
-            height: 300px; /* увеличиваем размер кнопки в 3 раза */
+            width: 200px; /* уменьшаем размер кнопки */
+            height: 200px; /* уменьшаем размер кнопки */
             background-color: white;
             border: none;
             border-radius: 50%;
@@ -36,20 +39,23 @@
             background-color: #ddd;
             border-radius: 25px;
             margin-top: 20px;
+            position: absolute;
+            bottom: 20px;
         }
         .progress-bar {
             width: 100%;
             height: 30px;
-            background-color: green;
+            background-color: #fcf003; /* указанный цвет для доступных кликов */
             border-radius: 25px;
             text-align: center;
-            color: white;
+            color: black;
+            line-height: 30px; /* для центрирования текста по вертикали */
         }
     </style>
 </head>
 <body>
     <div class="score" id="score">0</div>
-    <button class="button" id="button" onclick="incrementScore()"></button>
+    <button class="button" id="button" onclick="incrementScore()" ontouchstart="multiTouchStart(event)"></button>
     <div class="progress-container">
         <div class="progress-bar" id="progress-bar">5000</div>
     </div>
@@ -93,6 +99,13 @@
                 if (clicks === 0) {
                     document.getElementById('button').disabled = true;
                 }
+            }
+        }
+
+        function multiTouchStart(event) {
+            event.preventDefault();
+            if (event.touches.length <= 5) {
+                incrementScore();
             }
         }
 
