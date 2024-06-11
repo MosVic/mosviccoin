@@ -66,6 +66,7 @@
         let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
         let clicks = localStorage.getItem('clicks') ? parseInt(localStorage.getItem('clicks')) : 5000;
         let lastReset = localStorage.getItem('lastReset') ? parseInt(localStorage.getItem('lastReset')) : Date.now();
+        let lastInteraction = localStorage.getItem('lastInteraction') ? parseInt(localStorage.getItem('lastInteraction')) : Date.now();
 
         document.getElementById('score').textContent = score;
         document.getElementById('progress-bar').textContent = clicks;
@@ -98,6 +99,8 @@
                 document.getElementById('progress-bar').style.width = (clicks / 5000 * 100) + '%';
                 localStorage.setItem('score', score);
                 localStorage.setItem('clicks', clicks);
+                lastInteraction = Date.now();
+                localStorage.setItem('lastInteraction', lastInteraction);
                 if (clicks === 0) {
                     document.getElementById('button').disabled = true;
                 }
@@ -111,6 +114,26 @@
             }
         }
 
+        function recoverClicks() {
+            let now = Date.now();
+            let elapsed = Math.floor((now - lastInteraction) / 1000);
+            if (elapsed > 0) {
+                let newClicks = Math.min(clicks + elapsed, 5000);
+                if (newClicks !== clicks) {
+                    clicks = newClicks;
+                    localStorage.setItem('clicks', clicks);
+                    document.getElementById('progress-bar').textContent = clicks;
+                    document.getElementById('progress-bar').style.width = (clicks / 5000 * 100) + '%';
+                    lastInteraction = now;
+                    localStorage.setItem('lastInteraction', lastInteraction);
+                    if (clicks > 0) {
+                        document.getElementById('button').disabled = false;
+                    }
+                }
+            }
+        }
+
+        setInterval(recoverClicks, 1000);
         checkReset();
     </script>
 </body>
