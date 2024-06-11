@@ -31,26 +31,33 @@
             margin-bottom: 20px;
         }
         .button {
-            padding: 10px 20px;
-            background-color: white;
-            color: #8b1fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-        .timer {
-            font-size: 1.5em;
-            margin-top: 20px;
-        }
-        .leaderboard-button {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #fcf003;
+            padding: 20px 40px;
+            background-color: black;
+            color: white;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 1em;
+            font-size: 1.5em;
+        }
+        .button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .bottom-container {
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 25px;
+            padding: 20px;
+            position: absolute;
+            bottom: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+        .timer {
+            font-size: 1.5em;
+            color: black;
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
@@ -58,9 +65,10 @@
 <body>
     <div class="user-name" id="user-name">Welcome!</div>
     <div class="score" id="score">0</div>
-    <button class="button" id="claim-button" onclick="claim()">Claim</button>
-    <div class="timer" id="timer">24:00:00</div>
-    <button class="leaderboard-button" onclick="openLeaderboard()">LeaderBoard</button>
+    <div class="bottom-container">
+        <button class="button" id="claim-button" onclick="claim()">Claim</button>
+        <div class="timer" id="timer">24:00:00</div>
+    </div>
 
     <script>
         const claimButton = document.getElementById('claim-button');
@@ -109,11 +117,6 @@
         const user = Telegram.WebApp.initDataUnsafe?.user;
         if (user) {
             document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
-        }
-
-        // Open LeaderBoard
-        function openLeaderboard() {
-            window.location.href = 'leaderboard.html';
         }
     </script>
 </body>
