@@ -20,6 +20,7 @@
             -webkit-user-select: none; /* для поддержки на мобильных устройствах */
             -moz-user-select: none; /* для Firefox */
             -ms-user-select: none; /* для Internet Explorer */
+            position: relative; /* для размещения анимации внутри body */
         }
         .score {
             font-size: 3em; /* увеличиваем размер текста */
@@ -60,11 +61,28 @@
             color: black;
             line-height: 30px; /* для центрирования текста по вертикали */
         }
+        .floating-text {
+            position: absolute;
+            color: white;
+            font-size: 2em;
+            opacity: 1;
+            animation: float 1s ease-out forwards;
+        }
+        @keyframes float {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
     </style>
 </head>
 <body>
     <div class="score" id="score">0</div>
-    <button class="button" id="button" onclick="incrementScore()" ontouchstart="multiTouchStart(event)"></button>
+    <button class="button" id="button" onclick="handleClick(event)" ontouchstart="multiTouchStart(event)"></button>
     <div class="bottom-container">
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar">5000</div>
@@ -119,7 +137,7 @@
         function multiTouchStart(event) {
             event.preventDefault();
             if (event.touches.length <= 5) {
-                incrementScore();
+                handleClick(event.touches[0]);
             }
         }
 
@@ -140,6 +158,23 @@
                     }
                 }
             }
+        }
+
+        function handleClick(event) {
+            incrementScore();
+            createFloatingText(event.clientX, event.clientY);
+        }
+
+        function createFloatingText(x, y) {
+            const text = document.createElement('div');
+            text.className = 'floating-text';
+            text.textContent = '+1';
+            text.style.left = `${x}px`;
+            text.style.top = `${y}px`;
+            document.body.appendChild(text);
+            setTimeout(() => {
+                text.remove();
+            }, 1000); // Удалить элемент через 1 секунду
         }
 
         setInterval(recoverClicks, 1000);
