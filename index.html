@@ -6,7 +6,7 @@
     <title>Game</title>
     <style>
         body {
-            background-color: #800080; /* фиолетовый цвет фона */
+            background-color: #8b1fff; /* указанный цвет фона */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -36,10 +36,13 @@
     <button class="button" onclick="incrementScore()"></button>
 
     <script>
-        let score = 0;
+        let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+        document.getElementById('score').textContent = 'Очки: ' + score;
+
         function incrementScore() {
             score++;
             document.getElementById('score').textContent = 'Очки: ' + score;
+            localStorage.setItem('score', score);
         }
     </script>
 </body>
