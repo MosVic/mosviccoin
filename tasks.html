@@ -33,6 +33,22 @@
             align-items: center;
             box-sizing: border-box;
             color: black;
+            position: relative;
+        }
+        .task img {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+        }
+        .task-reward {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            top: -20px;
+            left: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 10px;
+            padding: 5px 10px;
         }
         .task-button {
             padding: 10px 20px;
@@ -69,6 +85,10 @@
 <body>
     <button class="exit-button" onclick="exit()">Exit</button>
     <div class="task">
+        <div class="task-reward">
+            <img src="9733008.png" alt="Coin">
+            <span>0.2</span>
+        </div>
         <span>Subscribe to “Nodepay — новости”</span>
         <button class="task-button" id="task-button" onclick="completeTask()">Comply</button>
     </div>
@@ -95,8 +115,8 @@
         }
 
         function incrementScore() {
-            let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
-            score += 1;
+            let score = localStorage.getItem('score') ? parseFloat(localStorage.getItem('score')) : 0;
+            score += 0.2;
             localStorage.setItem('score', score);
         }
 
