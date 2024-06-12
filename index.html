@@ -41,7 +41,7 @@
             font-size: 3em;
             margin-left: 10px;
         }
-        .score img {
+        .coin-logo {
             width: 50px;
             height: 50px;
         }
@@ -61,26 +61,22 @@
             cursor: not-allowed;
         }
         .bottom-container {
-            width: 90%;
+            width: 80%;
             background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 25px;
+            border-radius: 15px;
             padding: 15px;
             position: absolute;
-            bottom: 50px;
+            bottom: 80px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-sizing: border-box;
         }
         .timer {
-            font-size: 2em;
+            font-size: 1.5em;
             color: black;
-            margin-right: 20px;
         }
         .tasks-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
             padding: 10px 20px;
             background-color: black;
             color: white;
@@ -90,15 +86,17 @@
             font-size: 1em;
             font-weight: bold;
             text-transform: uppercase;
+            position: absolute;
+            bottom: 20px;
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <img id="user-avatar" class="user-avatar" src="" alt="Avatar">
+    <div class="user-avatar" id="user-avatar"></div>
     <div class="user-name" id="user-name">Welcome!</div>
     <div class="score-container">
-        <img src="9733008.png" alt="Coin">
+        <img src="9733008.png" alt="Coin" class="coin-logo">
         <div class="score" id="score">0</div>
     </div>
     <div class="bottom-container">
@@ -115,7 +113,7 @@
         let lastClaimTime = localStorage.getItem('lastClaimTime') ? parseInt(localStorage.getItem('lastClaimTime')) : 0;
         const claimInterval = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
 
-        scoreDisplay.textContent = score;
+        scoreDisplay.textContent = score.toFixed(1);
 
         function updateTimer() {
             const now = Date.now();
@@ -146,10 +144,6 @@
             }
         }
 
-        function openTasks() {
-            window.location.href = 'tasks.html';
-        }
-
         setInterval(updateTimer, 1000);
         updateTimer();
 
@@ -159,8 +153,19 @@
         if (user) {
             document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
             if (user.photo_url) {
-                document.getElementById('user-avatar').src = user.photo_url;
+                const avatar = document.createElement('img');
+                avatar.src = user.photo_url;
+                avatar.style.width = '100px';
+                avatar.style.height = '100px';
+                avatar.style.borderRadius = '50%';
+                avatar.style.marginBottom = '10px';
+                document.getElementById('user-avatar').appendChild(avatar);
             }
+        }
+
+        // Open Tasks
+        function openTasks() {
+            window.location.href = 'tasks.html';
         }
     </script>
 </body>
