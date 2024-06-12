@@ -27,19 +27,11 @@
             margin-bottom: 10px;
         }
         .score {
-            display: flex;
-            align-items: center;
             font-size: 3em;
             margin-bottom: 20px;
         }
-        .coin-logo {
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-        .claim-button {
-            width: 250px;
-            height: 70px;
+        .button {
+            padding: 20px 50px;
             background-color: black;
             color: white;
             border: none;
@@ -49,89 +41,79 @@
             font-weight: bold;
             text-transform: uppercase;
         }
-        .claim-button.disabled {
+        .button:disabled {
             opacity: 0.5;
-            pointer-events: none;
-        }
-        .timer {
-            font-size: 1.5em;
-            color: black;
+            cursor: not-allowed;
         }
         .bottom-container {
-            width: 70%;
+            width: 90%;
             background-color: rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
-            padding: 10px;
+            border-radius: 25px;
+            padding: 15px;
             position: absolute;
-            bottom: 20px;
+            bottom: 50px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-sizing: border-box;
         }
-        .tasks-button {
-            width: 250px;
-            height: 50px;
-            background-color: #fcf003;
+        .timer {
+            font-size: 2em;
             color: black;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 1.5em;
-            font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 20px;
+            margin-right: 20px;
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="user-name" id="user-name">Welcome!</div>
-    <div class="score" id="score-container">
-        <img src="9733008.png" alt="Coin" class="coin-logo">
-        <div id="score">0</div>
-    </div>
-    <button class="tasks-button" onclick="openTasks()">Tasks</button>
+    <div class="score" id="score">0</div>
     <div class="bottom-container">
-        <button class="claim-button" id="claim-button" onclick="claimReward()">Claim</button>
+        <button class="button" id="claim-button" onclick="claim()">Claim</button>
         <div class="timer" id="timer">24:00:00</div>
     </div>
 
     <script>
+        const claimButton = document.getElementById('claim-button');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
         let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
         let lastClaimTime = localStorage.getItem('lastClaimTime') ? parseInt(localStorage.getItem('lastClaimTime')) : 0;
-        const claimButton = document.getElementById('claim-button');
-        const timerElement = document.getElementById('timer');
-        const oneDay = 24 * 60 * 60 * 1000;
+        const claimInterval = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+
+        scoreDisplay.textContent = score;
 
         function updateTimer() {
             const now = Date.now();
-            const timePassed = now - lastClaimTime;
-            const timeLeft = Math.max(oneDay - timePassed, 0);
-            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            const timeElapsed = now - lastClaimTime;
+            const timeLeft = claimInterval - timeElapsed;
 
-            timerElement.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
 
-            if (timeLeft === 0) {
-                claimButton.classList.remove('disabled');
+                timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                claimButton.disabled = true;
             } else {
-                claimButton.classList.add('disabled');
+                timerDisplay.textContent = '00:00:00';
+                claimButton.disabled = false;
             }
         }
 
-        function claimReward() {
-            if (Date.now() - lastClaimTime >= oneDay) {
-                score += 1;
+        function claim() {
+            if (!claimButton.disabled) {
+                score++;
                 lastClaimTime = Date.now();
                 localStorage.setItem('score', score);
                 localStorage.setItem('lastClaimTime', lastClaimTime);
-                document.getElementById('score').textContent = score;
+                scoreDisplay.textContent = score;
                 updateTimer();
             }
         }
 
         setInterval(updateTimer, 1000);
+        updateTimer();
 
         // Telegram Web App integration
         Telegram.WebApp.ready();
@@ -139,14 +121,6 @@
         if (user) {
             document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
         }
-
-        // Open Tasks Page
-        function openTasks() {
-            window.location.href = 'tasks.html';
-        }
-
-        document.getElementById('score').textContent = score;
-        updateTimer();
     </script>
 </body>
 </html>
