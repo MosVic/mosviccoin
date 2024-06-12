@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>Tasks</title>
     <style>
         body {
@@ -49,13 +49,28 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+        .exit-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+    <button class="exit-button" onclick="exit()">Exit</button>
     <div class="task">
-        <span>Подписаться на «Nodepay — новости»</span>
-        <button class="task-button" id="task-button" onclick="completeTask()">Выполнить</button>
+        <span>Subscribe to “Nodepay — новости”</span>
+        <button class="task-button" id="task-button" onclick="completeTask()">Comply</button>
     </div>
 
     <script>
@@ -64,6 +79,7 @@
 
         if (taskCompleted) {
             taskButton.disabled = true;
+            taskButton.textContent = 'Complete';
         }
 
         function completeTask() {
@@ -72,6 +88,7 @@
             // Обработка после возвращения на страницу
             setTimeout(() => {
                 taskButton.disabled = true;
+                taskButton.textContent = 'Complete';
                 localStorage.setItem('taskCompleted', 'true');
                 incrementScore();
             }, 2000); // Задержка для выполнения задачи
@@ -81,6 +98,10 @@
             let score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
             score += 1;
             localStorage.setItem('score', score);
+        }
+
+        function exit() {
+            window.location.href = 'index.html';
         }
 
         // Telegram Web App integration
