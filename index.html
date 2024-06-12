@@ -22,12 +22,6 @@
             -ms-user-select: none;
             position: relative;
         }
-        .avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
         .user-name {
             font-size: 2em;
             margin-bottom: 10px;
@@ -64,12 +58,12 @@
             color: black;
         }
         .bottom-container {
-            width: 90%;
+            width: 70%;
             background-color: rgba(255, 255, 255, 0.5);
             border-radius: 15px;
-            padding: 20px;
+            padding: 10px;
             position: absolute;
-            bottom: 50px;
+            bottom: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -85,12 +79,12 @@
             font-size: 1.5em;
             font-weight: bold;
             text-transform: uppercase;
+            margin-top: 20px;
         }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-    <img src="" alt="Avatar" class="avatar" id="avatar">
     <div class="user-name" id="user-name">Welcome!</div>
     <div class="score" id="score-container">
         <img src="9733008.png" alt="Coin" class="coin-logo">
@@ -144,7 +138,6 @@
         const user = Telegram.WebApp.initDataUnsafe?.user;
         if (user) {
             document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
-            document.getElementById('avatar').src = user.photo_url;
         }
 
         // Open Tasks Page
