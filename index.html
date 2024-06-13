@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <title>Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровой сайт с обратной связью</title>
     <style>
         body {
             background-color: #8b1fff;
@@ -89,84 +89,73 @@
             position: absolute;
             bottom: 20px;
         }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-bottom: 10px;
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none;
+        }
     </style>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
     <div class="user-avatar" id="user-avatar"></div>
-    <div class="user-name" id="user-name">Welcome!</div>
+    <div class="user-name" id="user-name">Добро пожаловать!</div>
     <div class="score-container">
-        <img src="9733008.png" alt="Coin" class="coin-logo">
+        <img src="9733008.png" alt="Монета" class="coin-logo">
         <div class="score" id="score">0</div>
     </div>
     <div class="bottom-container">
-        <button class="button" id="claim-button" onclick="claim()">Claim</button>
-        <div class="timer" id="timer">24:00:00</div>
+        <textarea id="user-input" placeholder="Введите ваш отзыв или текст"></textarea>
+        <button class="button" id="submit-button" onclick="submitText()">Отправить текст</button>
     </div>
-    <button class="tasks-button" onclick="openTasks()">Tasks</button>
 
     <script>
-        const claimButton = document.getElementById('claim-button');
+        const submitButton = document.getElementById('submit-button');
+        const userInput = document.getElementById('user-input');
         const scoreDisplay = document.getElementById('score');
-        const timerDisplay = document.getElementById('timer');
-        let score = localStorage.getItem('score') ? parseFloat(localStorage.getItem('score')) : 0;
-        let lastClaimTime = localStorage.getItem('lastClaimTime') ? parseInt(localStorage.getItem('lastClaimTime')) : 0;
-        const claimInterval = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
+        const apiUrl = 'https://api.github.com/repos/ваш_аккаунт/ваш_репозиторий/issues';
 
-        scoreDisplay.textContent = score.toFixed(1);
-
-        function updateTimer() {
-            const now = Date.now();
-            const timeElapsed = now - lastClaimTime;
-            const timeLeft = claimInterval - timeElapsed;
-
-            if (timeLeft > 0) {
-                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                timerDisplay.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                claimButton.disabled = true;
-            } else {
-                timerDisplay.textContent = '00:00:00';
-                claimButton.disabled = false;
+        // Функция для отправки текста в GitHub Issues
+        function submitText() {
+            const text = userInput.value.trim();
+            if (text === '') {
+                alert('Пожалуйста, введите текст.');
+                return;
             }
+
+            const data = {
+                title: 'Новый текст от пользователя',
+                body: text
+            };
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'token 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',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Текст успешно отправлен!');
+                    userInput.value = ''; // Очищаем поле ввода
+                } else {
+                    alert('Ошибка при отправке текста.');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при отправке текста.');
+            });
         }
 
-        function claim() {
-            if (!claimButton.disabled) {
-                score += 0.2;
-                lastClaimTime = Date.now();
-                localStorage.setItem('score', score);
-                localStorage.setItem('lastClaimTime', lastClaimTime);
-                scoreDisplay.textContent = score.toFixed(1);
-                updateTimer();
-            }
-        }
-
-        setInterval(updateTimer, 1000);
-        updateTimer();
-
-        // Telegram Web App integration
-        Telegram.WebApp.ready();
-        const user = Telegram.WebApp.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('user-name').textContent = `Welcome, ${user.first_name}!`;
-            if (user.photo_url) {
-                const avatar = document.createElement('img');
-                avatar.src = user.photo_url;
-                avatar.style.width = '100px';
-                avatar.style.height = '100px';
-                avatar.style.borderRadius = '50%';
-                avatar.style.marginBottom = '10px';
-                document.getElementById('user-avatar').appendChild(avatar);
-            }
-        }
-
-        // Open Tasks
-        function openTasks() {
-            window.location.href = 'tasks.html';
-        }
+        // Дополнительный код, который у вас уже есть (для отображения данных)
+        // Можете добавить его сюда, если есть дополнительные функции или обработчики.
     </script>
 </body>
 </html>
