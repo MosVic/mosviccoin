@@ -76,7 +76,7 @@
             font-size: 1.5em;
             color: black;
         }
-        .tasks-button, .ton-connect-button {
+        .tasks-button {
             padding: 10px 20px;
             background-color: black;
             color: white;
@@ -89,15 +89,8 @@
             position: absolute;
             bottom: 20px;
         }
-        .tasks-button {
-            left: 20px;
-        }
-        .ton-connect-button {
-            right: 20px;
-        }
     </style>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src="https://unpkg.com/@tonconnect/sdk@0.0.1/dist/tonconnect.min.js"></script>
 </head>
 <body>
     <div class="user-avatar" id="user-avatar"></div>
@@ -111,7 +104,6 @@
         <div class="timer" id="timer">24:00:00</div>
     </div>
     <button class="tasks-button" onclick="openTasks()">Tasks</button>
-    <button class="ton-connect-button" onclick="connectTonWallet()">Connect TON Wallet</button>
 
     <script>
         const claimButton = document.getElementById('claim-button');
@@ -119,7 +111,7 @@
         const timerDisplay = document.getElementById('timer');
         let score = localStorage.getItem('score') ? parseFloat(localStorage.getItem('score')) : 0;
         let lastClaimTime = localStorage.getItem('lastClaimTime') ? parseInt(localStorage.getItem('lastClaimTime')) : 0;
-        const claimInterval = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        const claimInterval = 24 * 60 * 60 * 1000; // 24 часа в миллисекундах
 
         scoreDisplay.textContent = score.toFixed(1);
 
@@ -175,18 +167,9 @@
         function openTasks() {
             window.location.href = 'tasks.html';
         }
-
-        // TON Connect
-        async function connectTonWallet() {
-            try {
-                const tonConnect = new TonConnect();
-                await tonConnect.connect();
-                // Handle successful connection
-                console.log('TON Wallet connected successfully');
-            } catch (error) {
-                console.error('Failed to connect TON Wallet', error);
-            }
-        }
     </script>
 </body>
 </html>
+
+
+в этом html коде (сайт) создай новую кнопку, которая будет запускать TON CONNECT (по аналогии с wallet connect)
